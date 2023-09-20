@@ -37,46 +37,45 @@ public class TelegramBotListener implements UpdatesListener {
 
 
         for (Update update : updates) {
+
             if (update.message() != null && update.message().text() != null) {
-                var text = update.message().text();
                 Long chatId = update.message().chat().id();
+                var text = update.message().text();
                 if ("/start".equals(text)) {
                     SendMessage sendMessage = new SendMessage(chatId, """
                             Привет. Это бот приюта для кошек.
                             """);
 
-                    InlineKeyboardButton buttonText = new InlineKeyboardButton(" Наш  Лесной приют ");
-                    buttonText.callbackData(" Наш Лесной приют ");
-                    InlineKeyboardButton buttonAddress = new InlineKeyboardButton(" Наш адрес ");
-                    buttonAddress.callbackData(" Наш адрес ");
+                    InlineKeyboardButton buttonText = new InlineKeyboardButton("Наш Лесной приют");
+                    buttonText.callbackData("Наш Лесной приют");
+                    InlineKeyboardButton buttonAddress = new InlineKeyboardButton("Наш адрес");
+                    buttonAddress.callbackData("Наш адрес");
                     Keyboard keyboard = new InlineKeyboardMarkup(buttonText, buttonAddress);
                     sendMessage.replyMarkup(keyboard);
                     telegramBot.execute(sendMessage);
-                } else if (update.callbackQuery() != null && update.callbackQuery().data() != null) {
-                    var data = update.callbackQuery().data();
-                    var massageId = update.callbackQuery().message().messageId();
-                     sendMessage(update.callbackQuery().message().chat().id()," Наш Лесной приют " );
-                    // update.callbackQuery().message().chat().id();
-                    if (data.equals("Наш Лесной приют")) {
-                        // ответ на кнопку "Наш лесной приют"
+                }
+            } else if (update.callbackQuery() != null && update.callbackQuery().data() != null) {
+                var chatId = update.callbackQuery().message().chat().id();
+                var data = update.callbackQuery().data();
+                var massageId = update.callbackQuery().message().messageId();
+                sendMessage(update.callbackQuery().message().chat().id(), "Наш Лесной приют ");
+                // update.callbackQuery().message().chat().id();
+                if (data.equals("Наш Лесной приют")) {
+                    // ответ на кнопку "Наш лесной приют"
 
-                        SendMessage sendMessage = new SendMessage(chatId," В нашем приюте живут кошки , которые скучают и ждут своих хозяев ");
+                    SendMessage sendMessage = new SendMessage(chatId, " В нашем приюте живут кошки , которые скучают и ждут своих хозяев ");
 
-                        telegramBot.execute(sendMessage);
+                    telegramBot.execute(sendMessage);
 
-                    }if (data.equals(" Наш адрес ")) {
-                        // ответ на кнопку "Наш адрес"
-                        SendMessage sendMessage = new SendMessage(chatId,"городской округ Истра, деревня Бодрово") ;
-                        telegramBot.execute(sendMessage);
-                        }
-                }else {
+                } else if (data.equals("Наш адрес")) {
+                    // ответ на кнопку "Наш адрес"
+                    SendMessage sendMessage = new SendMessage(chatId, "городской округ Истра, деревня Бодрово");
+                    telegramBot.execute(sendMessage);
+                } else {
                     sendMessage(chatId, "Некорректный формат сообщения");
                 }
             }
-
         }
-
-
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
