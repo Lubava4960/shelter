@@ -52,24 +52,25 @@ public class TelegramBotListener implements UpdatesListener {
                     Keyboard keyboard = new InlineKeyboardMarkup(buttonText, buttonAddress);
                     sendMessage.replyMarkup(keyboard);
                     telegramBot.execute(sendMessage);
-                } else if (text != null) {
-
-                    sendMessage(chatId, "Некорректный формат сообщения!");
                 } else if (update.callbackQuery() != null && update.callbackQuery().data() != null) {
                     var data = update.callbackQuery().data();
-                    if (data.equals("Наш Лесной приют ")) {
+                    var massageId = update.callbackQuery().message().messageId();
+                     sendMessage(update.callbackQuery().message().chat().id()," Наш Лесной приют " );
+                    // update.callbackQuery().message().chat().id();
+                    if (data.equals("Наш Лесной приют")) {
                         // ответ на кнопку "Наш лесной приют"
 
-                        SendMessage sendMessage = new SendMessage(chatId, """
-                                В нашем приюте живут кошки , которые скучают и ждут своих хозяев
-                                """);
+                        SendMessage sendMessage = new SendMessage(chatId," В нашем приюте живут кошки , которые скучают и ждут своих хозяев ");
+
                         telegramBot.execute(sendMessage);
 
-                    } else if (data.equals(" Наш адрес ")) {
+                    }if (data.equals(" Наш адрес ")) {
                         // ответ на кнопку "Наш адрес"
-                        SendMessage sendMessage = new SendMessage(chatId, "городской округ Истра, деревня Бодрово" );
+                        SendMessage sendMessage = new SendMessage(chatId,"городской округ Истра, деревня Бодрово") ;
                         telegramBot.execute(sendMessage);
                         }
+                }else {
+                    sendMessage(chatId, "Некорректный формат сообщения");
                 }
             }
 
@@ -82,7 +83,7 @@ public class TelegramBotListener implements UpdatesListener {
 
 
 
-    private void sendMessage(Long chatId, String text) {
+    public void sendMessage(Long chatId, String text) {
         SendMessage sendMessage = new SendMessage(chatId, text);
 }
     }
